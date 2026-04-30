@@ -1,5 +1,6 @@
 {
   "outputDirectory": "public",
-  "buildCommand": "node -e \"console.log('Static site: no build step needed')\"",
-  "installCommand": "npm install --ignore-scripts"
+  "buildCommand": null,
+  "installCommand": null,
+  "framework": null
 }
