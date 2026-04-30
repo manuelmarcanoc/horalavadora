@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# No indexar datos crudos
+Disallow: /data.json
+
+Sitemap: https://horalavadora.es/sitemap.xml

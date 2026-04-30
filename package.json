@@ -1,0 +1,12 @@
+{
+  "name": "horalavadora",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "fetch":       "node scripts/fetch-redata.mjs",
+    "fetch:esios": "node scripts/fetch-esios.mjs",
+    "dev":         "npx --yes serve public -l 4173",
+    "build":       "node -e \"console.log('Static site: no build step')\""
+  }
+}
+

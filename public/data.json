@@ -1,0 +1,143 @@
+{
+  "generatedAt": "2026-04-26T09:14:43.328Z",
+  "source": {
+    "provider": "REData (Red Eléctrica de España)",
+    "endpoint": "https://apidatos.ree.es/es/datos/mercados/precios-mercados-tiempo-real",
+    "description": "Precio mercado spot diario OMIE — €/kWh (convertido de €/MWh)"
+  },
+  "timezone": "Europe/Madrid",
+  "currency": "EUR",
+  "unit": "EUR_PER_KWH",
+  "days": [
+    {
+      "date": "2026-04-26",
+      "hours": [
+        {
+          "start": "2026-04-26T00:00:00.000+02:00",
+          "end": null,
+          "price": 0.13636
+        },
+        {
+          "start": "2026-04-26T01:00:00.000+02:00",
+          "end": null,
+          "price": 0.12053
+        },
+        {
+          "start": "2026-04-26T02:00:00.000+02:00",
+          "end": null,
+          "price": 0.11712
+        },
+        {
+          "start": "2026-04-26T03:00:00.000+02:00",
+          "end": null,
+          "price": 0.11394
+        },
+        {
+          "start": "2026-04-26T04:00:00.000+02:00",
+          "end": null,
+          "price": 0.11502
+        },
+        {
+          "start": "2026-04-26T05:00:00.000+02:00",
+          "end": null,
+          "price": 0.11837
+        },
+        {
+          "start": "2026-04-26T06:00:00.000+02:00",
+          "end": null,
+          "price": 0.12875
+        },
+        {
+          "start": "2026-04-26T07:00:00.000+02:00",
+          "end": null,
+          "price": 0.13254
+        },
+        {
+          "start": "2026-04-26T08:00:00.000+02:00",
+          "end": null,
+          "price": 0.0921
+        },
+        {
+          "start": "2026-04-26T09:00:00.000+02:00",
+          "end": null,
+          "price": 0.04278
+        },
+        {
+          "start": "2026-04-26T10:00:00.000+02:00",
+          "end": null,
+          "price": 0.03518
+        },
+        {
+          "start": "2026-04-26T11:00:00.000+02:00",
+          "end": null,
+          "price": 0.0422
+        },
+        {
+          "start": "2026-04-26T12:00:00.000+02:00",
+          "end": null,
+          "price": 0.04166
+        },
+        {
+          "start": "2026-04-26T13:00:00.000+02:00",
+          "end": null,
+          "price": 0.04123
+        },
+        {
+          "start": "2026-04-26T14:00:00.000+02:00",
+          "end": null,
+          "price": 0.04151
+        },
+        {
+          "start": "2026-04-26T15:00:00.000+02:00",
+          "end": null,
+          "price": 0.04299
+        },
+        {
+          "start": "2026-04-26T16:00:00.000+02:00",
+          "end": null,
+          "price": 0.04425
+        },
+        {
+          "start": "2026-04-26T17:00:00.000+02:00",
+          "end": null,
+          "price": 0.05002
+        },
+        {
+          "start": "2026-04-26T18:00:00.000+02:00",
+          "end": null,
+          "price": 0.04386
+        },
+        {
+          "start": "2026-04-26T19:00:00.000+02:00",
+          "end": null,
+          "price": 0.07453
+        },
+        {
+          "start": "2026-04-26T20:00:00.000+02:00",
+          "end": null,
+          "price": 0.12367
+        },
+        {
+          "start": "2026-04-26T21:00:00.000+02:00",
+          "end": null,
+          "price": 0.15027
+        },
+        {
+          "start": "2026-04-26T22:00:00.000+02:00",
+          "end": null,
+          "price": 0.15336
+        },
+        {
+          "start": "2026-04-26T23:00:00.000+02:00",
+          "end": null,
+          "price": 0.1338
+        }
+      ],
+      "summary": {
+        "min": 0.03518,
+        "max": 0.15336,
+        "mean": 0.089002
+      }
+    }
+  ]
+}

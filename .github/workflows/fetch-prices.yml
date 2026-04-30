@@ -1,0 +1,35 @@
+name: Actualizar precios de la luz
+
+on:
+  schedule:
+    # Cada hora entre las 6h y las 24h (hora UTC = Madrid -2h en verano)
+    - cron: "5 4-22 * * *"
+  workflow_dispatch: # permite lanzarlo manualmente desde GitHub
+
+jobs:
+  fetch-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Instalar dependencias
+        run: npm install --ignore-scripts 2>/dev/null || true
+
+      - name: Fetch datos REData
+        run: node scripts/fetch-redata.mjs
+
+      - name: Commit y push data.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data.json
+          git diff --cached --quiet || git commit -m "data: precios $(date +'%Y-%m-%d %H:%M') UTC"
+          git push

@@ -1,0 +1,18 @@
+{
+  "name": "HoraLavadora",
+  "short_name": "HoraLavadora",
+  "description": "Precio de la luz por horas en España.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#070a12",
+  "theme_color": "#0b0f1a",
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+

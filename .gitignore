@@ -1,0 +1,9 @@
+node_modules/
+.DS_Store
+
+# local env
+.env
+
+# generated data (we DO want to commit it for static hosting)
+# public/data.json
+

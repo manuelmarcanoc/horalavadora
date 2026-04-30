@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#e8d5bc" />
+
+    <!-- ── SEO primario ───────────────────────────────────── -->
+    <title>HoraLavadora — Precio de la luz ahora en España · €/kWh por horas</title>
+    <meta name="description" content="Consulta el precio de la luz en España ahora mismo, hora a hora. Gráfica diaria, semanal, mensual y anual. Datos oficiales ESIOS·REE en tiempo real. Gratis y sin registro." />
+    <meta name="keywords" content="precio luz hoy, precio luz por horas, tarifa PVPC, precio electricidad España, precio kWh hoy, cuando poner lavadora, hora más barata luz, precio luz ahora" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="author" content="horalavadora.es" />
+    <link rel="canonical" href="https://horalavadora.es/" />
+
+    <!-- ── Open Graph (Facebook, WhatsApp, LinkedIn…) ────── -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:url"         content="https://horalavadora.es/" />
+    <meta property="og:site_name"   content="HoraLavadora" />
+    <meta property="og:title"       content="Precio de la luz ahora · €/kWh hora a hora en España" />
+    <meta property="og:description" content="¿Cuándo es más barato encender la lavadora? Consulta el precio de la luz en España en tiempo real, con semáforo y gráfica. Datos oficiales de REE·ESIOS." />
+    <meta property="og:image"       content="https://horalavadora.es/og-image.png" />
+    <meta property="og:image:width"  content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale"      content="es_ES" />
+
+    <!-- ── Twitter Card ──────────────────────────────────── -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:site"        content="@horalavadora" />
+    <meta name="twitter:title"       content="Precio de la luz ahora · HoraLavadora" />
+    <meta name="twitter:description" content="Precio €/kWh hora a hora en España. Semáforo barata/media/cara + gráfica histórica. Datos REE·ESIOS." />
+    <meta name="twitter:image"       content="https://horalavadora.es/og-image.png" />
+
+    <!-- ── Schema.org JSON-LD ────────────────────────────── -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "HoraLavadora",
+      "url": "https://horalavadora.es/",
+      "description": "Precio de la luz en España hora a hora. Consulta el precio actual del kWh, gráfica histórica y el mejor momento para encender electrodomésticos.",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "inLanguage": "es",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "HoraLavadora",
+        "url": "https://horalavadora.es/"
+      }
+    }
+    </script>
+
+    <!-- ── PWA & favicons ─────────────────────────────────── -->
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icons/icon.svg" />
+
+    <!-- ── Performance: preconnect + preload fonts ────────── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+
+    <!-- ── Google AdSense ─────────────────────────────────── -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8724519668955265" crossorigin="anonymous"></script>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        /* ── paleta extraída del logo ─────────────────────── */
+        --bg:          #e8d5bc;   /* crema más oscura para contraste */
+        --bg2:         #ddc8ac;   /* tono más profundo */
+        --surface:     #fdf7ef;   /* blanco cálido para cards */
+        --surface2:    #e8d5bc;   /* panel de tabs */
+
+        --brand:       #c0471a;   /* terracota del logo letras */
+        --brand-light: #fae5db;   /* terracota muy pálido */
+        --gold:        #c9a227;   /* dorado lavadora */
+        --gold-light:  #fdf3cc;   /* dorado muy pálido */
+        --gold-mid:    #e8d07a;   /* dorado medio para líneas */
+
+        --border:  rgba(192,71,26,0.12);
+        --border2: rgba(192,71,26,0.20);
+        --text:    #2d1a0a;       /* marrón oscuro cálido */
+        --muted:   #8a6040;       /* marrón medio */
+        --muted2:  #c4a882;       /* marrón claro */
+
+        /* semáforo */
+        --green:  #3aaa6e;
+        --orange: #e07b12;
+        --red:    #d63030;
+
+        --radius-lg: 20px;
+        --radius-md: 14px;
+        --radius-sm: 10px;
+      }
+
+      html, body {
+        min-height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Inter', system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ═══════════════════════════════════════════════════
+         NAVBAR
+      ═══════════════════════════════════════════════════ */
+      .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        background: rgba(247,237,224,0.90);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1.5px solid var(--border2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 28px;
+        height: 62px;
+      }
+
+      .navbar-logo {
+        height: 28px;
+        width: auto;
+        display: block;
+        object-fit: contain;
+      }
+
+      .navbar-right {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .navbar-washing {
+        height: 44px;
+        width: auto;
+        object-fit: contain;
+        animation: float 4s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(-2deg); }
+        50%       { transform: translateY(-5px) rotate(2deg); }
+      }
+
+      /* ═══════════════════════════════════════════════════
+         PAGE LAYOUT — mobile-first, 2-col on desktop
+      ═══════════════════════════════════════════════════ */
+      .page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 32px 24px 56px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      @media (min-width: 860px) {
+        .page {
+          grid-template-columns: 1fr 1.4fr;
+          gap: 32px;
+          align-items: start;
+          padding: 36px 36px 64px;
+        }
+      }
+
+      /* ═══════════════════════════════════════════════════
+         LEFT PANEL — hero price
+      ═══════════════════════════════════════════════════ */
+      .panel-left {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      /* meta row */
+      .meta-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .date-label {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted);
+        letter-spacing: 0.01em;
+      }
+
+      .live-dot {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .live-dot::before {
+        content: '';
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 8px rgba(58,170,110,0.6);
+        animation: pulse 2.2s infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0.3; }
+      }
+
+      /* price hero */
+      .price-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 28px 24px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .price-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+      }
+
+      .price-big {
+        font-size: clamp(58px, 14vw, 84px);
+        font-weight: 900;
+        line-height: 1;
+        letter-spacing: -0.05em;
+        font-variant-numeric: tabular-nums;
+        color: var(--brand);
+        transition: color 0.5s ease;
+      }
+
+      .price-unit {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--muted);
+        padding-bottom: 9px;
+      }
+
+      /* semáforo */
+      .traffic-light {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .tl-circles { display: flex; gap: 7px; }
+
+      .tl-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--bg2);
+        border: 1.5px solid var(--border2);
+        transition: background 0.4s, box-shadow 0.4s, border-color 0.4s;
+      }
+
+      .tl-dot.active-green  { background: var(--green);  border-color: var(--green);  box-shadow: 0 0 10px rgba(58,170,110,0.45); }
+      .tl-dot.active-orange { background: var(--orange); border-color: var(--orange); box-shadow: 0 0 10px rgba(224,123,18,0.45); }
+      .tl-dot.active-red    { background: var(--red);    border-color: var(--red);    box-shadow: 0 0 10px rgba(214,48,48,0.45); }
+
+      .tl-label {
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        transition: color 0.4s;
+      }
+
+      .best-hour-chip {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        color: var(--muted);
+        background: var(--gold-light);
+        border: 1.5px solid var(--gold-mid);
+        border-radius: 99px;
+        padding: 5px 12px;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .best-hour-chip strong { color: var(--brand); font-weight: 700; }
+
+      /* ═══════════════════════════════════════════════════
+         RIGHT PANEL — chart
+      ═══════════════════════════════════════════════════ */
+      .panel-right {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .section-title {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+
+      /* tabs */
+      .tabs {
+        display: flex;
+        gap: 3px;
+        background: var(--surface2);
+        border-radius: var(--radius-sm);
+        padding: 4px;
+        border: 1.5px solid var(--border);
+      }
+
+      .tab {
+        flex: 1;
+        padding: 9px 6px;
+        font-size: 12px;
+        font-weight: 700;
+        text-align: center;
+        border-radius: 8px;
+        border: none;
+        background: none;
+        color: var(--muted);
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        font-family: 'Inter', system-ui, sans-serif;
+      }
+
+      .tab.active {
+        background: var(--surface);
+        color: var(--brand);
+        box-shadow: 0 1px 5px rgba(192,71,26,0.12);
+      }
+
+      /* chart container */
+      .chart-wrap {
+        position: relative;
+        height: 190px;
+        background: var(--surface);
+        border-radius: var(--radius-md);
+        border: 1.5px solid var(--border);
+        padding: 16px 16px 8px;
+      }
+
+      canvas#chart {
+        width: 100% !important;
+        height: 100% !important;
+        display: block;
+        cursor: crosshair;
+      }
+
+      /* tooltip */
+      .chart-tooltip {
+        position: absolute;
+        background: var(--brand);
+        color: #fff;
+        border-radius: 8px;
+        padding: 6px 10px;
+        font-size: 12px;
+        font-weight: 700;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.12s;
+        white-space: nowrap;
+        transform: translate(-50%, -115%);
+        z-index: 10;
+        font-family: 'Inter', system-ui, sans-serif;
+      }
+
+      .chart-tooltip.visible { opacity: 1; }
+
+      /* x labels */
+      .chart-labels {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 16px;
+        margin-top: 4px;
+      }
+
+      .chart-labels span {
+        font-size: 10px;
+        color: var(--muted2);
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      /* stats */
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+
+      .stat-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 14px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .stat-label {
+        font-size: 10px;
+        color: var(--muted2);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .stat-value {
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .stat-value.green   { color: var(--green); }
+      .stat-value.red     { color: var(--red); }
+      .stat-value.neutral { color: var(--brand); }
+
+      /* ── Info pills (solar + countdown) ── */
+      .info-pills {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 2px;
+      }
+
+      .info-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 14px;
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+      }
+
+      .info-pill .pill-icon { font-size: 16px; flex-shrink: 0; }
+      .info-pill .pill-text { flex: 1; }
+      .info-pill .pill-val  { font-weight: 800; color: var(--brand); font-variant-numeric: tabular-nums; }
+      .info-pill.solar      { background: var(--gold-light); border-color: var(--gold-mid); }
+      .info-pill.countdown  { background: var(--brand-light); border-color: rgba(192,71,26,0.25); }
+
+      /* ── PWA install button ── */
+      .install-btn {
+        display: none; /* shown via JS when prompt available */
+        align-items: center;
+        gap: 7px;
+        padding: 7px 16px;
+        border-radius: 99px;
+        background: var(--brand);
+        color: #fff;
+        border: none;
+        font-size: 12px;
+        font-weight: 700;
+        font-family: 'Inter', system-ui, sans-serif;
+        cursor: pointer;
+        letter-spacing: 0.03em;
+        transition: background 0.2s, transform 0.15s;
+        white-space: nowrap;
+      }
+
+      .install-btn:hover  { background: #a03915; transform: scale(1.03); }
+      .install-btn:active { transform: scale(0.98); }
+      .install-btn svg    { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
+
+      /* ── Ad slot ── */
+      .ad-slot {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 90px;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        background: rgba(255,255,255,0.4);
+        border: 1px dashed var(--border2);
+      }
+
+      /* footer */
+      footer {
+        grid-column: 1 / -1;
+        text-align: center;
+        font-size: 11px;
+        color: var(--muted2);
+        letter-spacing: 0.03em;
+        padding-top: 8px;
+      }
+      /* ── Stale-data banner ── */
+      #staleBanner {
+        display: none;
+        background: #fff8e1;
+        border-bottom: 1.5px solid #f0d060;
+        color: #7a5c00;
+        font-size: 12px;
+        font-weight: 600;
+        text-align: center;
+        padding: 7px 16px;
+        letter-spacing: 0.02em;
+        z-index: 99;
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- ── NAVBAR ── -->
+    <nav class="navbar" aria-label="Navegación principal">
+      <img src="./letras.png" alt="horalavadora.es" class="navbar-logo" />
+      <div class="navbar-right">
+        <button class="install-btn" id="installBtn" aria-label="Instalar app">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 16l-5-5h3V4h4v7h3l-5 5zm-7 4h14v-2H5v2z"/></svg>
+          Instalar app
+        </button>
+        <img src="./lavadora.png" alt="" aria-hidden="true" class="navbar-washing" />
+      </div>
+    </nav>
+
+    <!-- ── STALE BANNER ── -->
+    <div id="staleBanner" role="alert" aria-live="polite"></div>
+
+    <!-- ── PAGE ── -->
+    <main class="page">
+
+      <!-- LEFT: precio -->
+      <section class="panel-left" aria-label="Precio actual">
+
+        <div class="meta-row">
+          <span class="date-label" id="dateLabel">—</span>
+        </div>
+
+        <div class="price-card">
+          <div class="price-row">
+            <h1 class="price-big" id="priceEl">—</h1>
+            <span class="price-unit">€/kWh</span>
+          </div>
+
+          <div class="traffic-light">
+            <div class="tl-circles">
+              <div class="tl-dot" id="dotGreen"></div>
+              <div class="tl-dot" id="dotOrange"></div>
+              <div class="tl-dot" id="dotRed"></div>
+            </div>
+            <span class="tl-label" id="tlLabel">—</span>
+            <div class="best-hour-chip" id="bestHourChip" style="display:none">
+              Mejor hoy: <strong id="bestHourVal">—</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- pills: solar context + countdown -->
+        <div class="info-pills">
+          <div class="info-pill solar" id="solarPill" style="display:none">
+            <span class="pill-icon">☀️</span>
+            <span class="pill-text">Precio bajo por <strong>exceso de solar</strong></span>
+          </div>
+          <div class="info-pill countdown" id="countdownPill" style="display:none">
+            <span class="pill-icon">⏱️</span>
+            <span class="pill-text">Próxima hora barata en <span class="pill-val" id="countdownVal">—</span></span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT: gráfica -->
+      <section class="panel-right" aria-label="Histórico de precios">
+
+        <nav class="tabs" role="tablist" aria-label="Período del gráfico">
+          <button class="tab active" data-period="diario"  id="tab-diario">Hoy</button>
+          <button class="tab"        data-period="semanal" id="tab-semanal">Semana</button>
+          <button class="tab"        data-period="mensual" id="tab-mensual">Mes</button>
+          <button class="tab"        data-period="anual"   id="tab-anual">Año</button>
+        </nav>
+
+        <div class="chart-wrap">
+          <canvas id="chart" aria-label="Gráfica de precio de la luz"></canvas>
+          <div class="chart-tooltip" id="chartTooltip"></div>
+        </div>
+        <div class="chart-labels" id="chartLabels"></div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <span class="stat-label">Mínimo</span>
+            <span class="stat-value green"   id="statMin">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Media</span>
+            <span class="stat-value neutral" id="statMean">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Máximo</span>
+            <span class="stat-value red"     id="statMax">—</span>
+          </div>
+        </div>
+
+      </section>
+
+      <footer>Fuente: ESIOS · REE &nbsp;·&nbsp; España</footer>
+
+      <!-- ── AdSense banner ── -->
+      <div class="ad-slot">
+        <ins class="adsbygoogle"
+             style="display:block;width:100%;height:90px"
+             data-ad-client="ca-pub-8724519668955265"
+             data-ad-slot="auto"
+             data-ad-format="horizontal"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
