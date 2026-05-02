@@ -2,5 +2,11 @@
   "outputDirectory": "public",
   "buildCommand": null,
   "installCommand": null,
-  "framework": null
+  "framework": null,
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  },
+  "ignoreCommand": "if git log -1 --pretty=%B | grep -q '^data:'; then exit 1; fi"
 }
