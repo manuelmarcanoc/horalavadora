@@ -4,15 +4,20 @@
   "description": "Precio de la luz por horas en España.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#070a12",
-  "theme_color": "#0b0f1a",
+  "background_color": "#e8d5bc",
+  "theme_color": "#c0471a",
   "icons": [
     {
-      "src": "./icons/icon.svg",
+      "src": "./icons/favicon.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
-
