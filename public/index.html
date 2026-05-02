@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
   <head>
     <meta charset="utf-8" />
@@ -55,7 +55,9 @@
     }
     </script>
 
-    <!-- ── PWA & favicons ─────────────────────────────────── -->
+        <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"\u00bfCu\u00e1ndo es mejor poner la lavadora para gastar menos luz?","acceptedAnswer":{"@type":"Answer","text":"Lo mejor es poner la lavadora cuando el precio est\u00e1 en verde (barato), normalmente entre las 14:00 y las 17:00 en d\u00edas soleados por el exceso de energ\u00eda solar, o de madrugada entre las 00:00 y las 08:00. HoraLavadora te muestra la pr\u00f3xima hora barata del d\u00eda."}},{"@type":"Question","name":"\u00bfCu\u00e1l es la hora m\u00e1s barata de la luz hoy en Espa\u00f1a?","acceptedAnswer":{"@type":"Answer","text":"El precio de la luz var\u00eda cada hora seg\u00fan el mercado el\u00e9ctrico OMIE. HoraLavadora muestra el precio actual en \u20ac/kWh con sem\u00e1foro barata/media/cara y la mejor hora restante del d\u00eda. Datos de Red El\u00e9ctrica de Espa\u00f1a actualizados cada hora."}},{"@type":"Question","name":"\u00bfQu\u00e9 es el precio PVPC de la electricidad?","acceptedAnswer":{"@type":"Answer","text":"El PVPC (Precio Voluntario para el Peque\u00f1o Consumidor) es la tarifa regulada que cambia hora a hora seg\u00fan el mercado mayorista. Usar la lavadora o el lavavajillas en horas baratas reduce tu factura de la luz."}},{"@type":"Question","name":"\u00bfCu\u00e1nto ahorro poniendo la lavadora en horas baratas?","acceptedAnswer":{"@type":"Answer","text":"Una lavadora consume entre 0,5 y 1 kWh por ciclo. Con diferencias de precio de hasta 0,15 \u20ac/kWh entre horas, puedes ahorrar entre 7 y 15 c\u00e9ntimos por lavada, m\u00e1s de 40-50\u20ac al a\u00f1o haciendo 5 lavadas semanales en horas baratas."}},{"@type":"Question","name":"\u00bfDe d\u00f3nde vienen los datos del precio de la luz?","acceptedAnswer":{"@type":"Answer","text":"Los datos provienen de la API p\u00fablica de Red El\u00e9ctrica de Espa\u00f1a (REData/REE), que publica el precio del mercado spot diario OMIE. HoraLavadora los convierte de \u20ac/MWh a \u20ac/kWh y los actualiza cada hora. Datos oficiales y gratuitos."}}]}
+    </script><!-- ── PWA & favicons ─────────────────────────────────── -->
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" href="./icons/favicon.png" type="image/png" />
     <link rel="shortcut icon" href="./icons/favicon.png" type="image/png" />
@@ -508,7 +510,7 @@
       }
 
       /* footer */
-      footer {
+      footer.page-footer {
         grid-column: 1 / -1;
         text-align: center;
         font-size: 11px;
@@ -516,6 +518,83 @@
         letter-spacing: 0.03em;
         padding-top: 8px;
       }
+
+      /* ── SEO content sections ── */
+      .seo-section {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .seo-section h2 {
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -0.01em;
+        margin-bottom: 2px;
+      }
+
+      .seo-intro {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 20px 22px;
+        font-size: 14px;
+        line-height: 1.7;
+        color: var(--muted);
+      }
+
+      .seo-intro strong { color: var(--text); }
+
+      .faq-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .faq-item {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+
+      .faq-item summary {
+        padding: 14px 18px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text);
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        user-select: none;
+      }
+
+      .faq-item summary::-webkit-details-marker { display: none; }
+
+      .faq-item summary::after {
+        content: '+';
+        font-size: 18px;
+        font-weight: 400;
+        color: var(--brand);
+        flex-shrink: 0;
+        transition: transform 0.2s;
+      }
+
+      .faq-item[open] summary::after { content: '−'; }
+
+      .faq-item p {
+        padding: 0 18px 16px;
+        font-size: 13px;
+        line-height: 1.65;
+        color: var(--muted);
+      }
+
+      .faq-item p strong { color: var(--text); }
       /* ── Stale-data banner ── */
       #staleBanner {
         display: none;
@@ -624,9 +703,47 @@
 
       </section>
 
-      <footer>Fuente: ESIOS · REE &nbsp;·&nbsp; España</footer>
+      <footer class="page-footer">Fuente: ESIOS · REE &nbsp;·&nbsp; España</footer>
 
-      <!-- AdSense Auto Ads: los anuncios se colocan automáticamente vía el script del <head> -->
+      <!-- AdSense Auto Ads -->
+
+      <!-- ── SEO: texto indexable + FAQ ── -->
+      <section class="seo-section" aria-label="Información sobre el precio de la luz">
+
+        <div class="seo-intro">
+          <p><strong>HoraLavadora</strong> es la forma más sencilla de saber <strong>cuándo poner la lavadora</strong> para gastar menos luz. Consulta el <strong>precio de la luz ahora mismo</strong> en €/kWh y descubre cuál es la <strong>hora más barata del día</strong> en España. El semáforo verde indica que la electricidad está barata, el naranja que está a precio medio y el rojo que está cara. Datos oficiales de <strong>Red Eléctrica de España (REE)</strong>, actualizados cada hora y gratis, sin registro.</p>
+        </div>
+
+        <h2>Preguntas frecuentes sobre el precio de la luz</h2>
+        <div class="faq-list">
+
+          <details class="faq-item">
+            <summary>¿Cuándo es mejor poner la lavadora para gastar menos luz?</summary>
+            <p>Lo mejor es poner la lavadora cuando el precio está en <strong>verde (barato)</strong>, normalmente entre las <strong>14:00 y las 17:00</strong> en días soleados, gracias al exceso de energía solar, o <strong>de madrugada entre las 00:00 y las 08:00</strong>. HoraLavadora te muestra la próxima hora barata del día para que no tengas que adivinar.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>¿Cuál es la hora más barata de la luz hoy en España?</summary>
+            <p>El precio de la luz varía cada hora según el mercado eléctrico OMIE. Arriba tienes el <strong>precio actual en €/kWh</strong> y el chip &ldquo;Mejor hoy&rdquo; que indica la hora más barata que queda en el día. Los datos vienen de la <strong>API pública de REE</strong> y se actualizan cada hora automáticamente.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>¿Qué es el precio PVPC de la electricidad?</summary>
+            <p>El <strong>PVPC</strong> (Precio Voluntario para el Pequeño Consumidor) es la tarifa regulada que cambia hora a hora según el mercado mayorista. Si tienes esta tarifa, te conviene usar tus electrodomésticos &mdash;lavadora, lavavajillas, calentador&mdash; en las horas de precio bajo para <strong>reducir tu factura de la luz</strong>.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>¿Cuánto puedo ahorrar poniendo la lavadora en horas baratas?</summary>
+            <p>Una lavadora consume entre <strong>0,5 y 1 kWh</strong> por ciclo. Si la diferencia entre la hora más cara y la más barata es de 0,15 €/kWh, <strong>ahorras entre 7 y 15 céntimos por lavada</strong>. Haciendo 5 lavadas a la semana en horas baratas puedes ahorrar más de <strong>40&ndash;50€ al año</strong> sin esfuerzo.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>¿De dónde vienen los datos del precio de la luz?</summary>
+            <p>Los precios provienen de la <strong>API pública de Red Eléctrica de España (REData)</strong>, que publica el precio del mercado spot diario OMIE. HoraLavadora los convierte de €/MWh a <strong>€/kWh</strong> y los actualiza cada hora. Son datos oficiales y gratuitos.</p>
+          </details>
+
+        </div>
+      </section>
 
     </main>
 
