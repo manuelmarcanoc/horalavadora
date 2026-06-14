@@ -8,5 +8,10 @@
       "main": true
     }
   },
-  "ignoreCommand": "if git log -1 --pretty=%B | grep -q '^data:'; then exit 1; fi"
+  "crons": [
+    {
+      "path": "/api/prices",
+      "schedule": "5 * * * *"
+    }
+  ]
 }

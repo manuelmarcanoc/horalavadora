@@ -69,30 +69,172 @@ function classify(price, sortedPrices) {
   return              { level: "expensive",        color: "red",    label: "Cara"   };
 }
 
-async function loadData() {
-  try {
-    const res = await fetch("./data.json", { cache: "no-store" });
-    if (res.ok) {
-      const json = await res.json();
-      // Guardamos en localStorage como backup de persistencia
-      try { localStorage.setItem("hl_data_cache", JSON.stringify(json)); } catch (_) {}
-      return json;
-    }
-  } catch (_) { /* sin red */ }
+const REDATA_URL =
+  "https://apidatos.ree.es/es/datos/mercados/precios-mercados-tiempo-real";
 
-  // Fallback 1: caché del Service Worker (fetch sin no-store)
+function madridDateStr(date = new Date()) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit",
+  }).format(date);
+}
+
+function addDays(dateStr, n) {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d, 12));
+  dt.setUTCDate(dt.getUTCDate() + n);
+  return madridDateStr(dt);
+}
+
+function parseRedataJson(json, dateStr) {
+  const included = json?.included ?? [];
+  let targetValues = null;
+
+  for (const item of included) {
+    const type = item?.type ?? "";
+    const title = (item?.attributes?.title ?? "").toLowerCase();
+    const vals = item?.attributes?.values;
+    if (!Array.isArray(vals) || vals.length === 0) continue;
+    if (type === "Mercados" || title.includes("spot") || title.includes("omie") || title.includes("diario")) {
+      if (!targetValues || vals.length > targetValues.length) targetValues = vals;
+    }
+  }
+  if (!targetValues) {
+    for (const item of included) {
+      const vals = item?.attributes?.values;
+      if (Array.isArray(vals) && vals.length > 0) { targetValues = vals; break; }
+    }
+  }
+  if (!targetValues?.length) return null;
+
+  const hours = targetValues
+    .filter((v) => v && typeof v.datetime === "string" && Number.isFinite(Number(v.value)))
+    .map((v) => ({
+      start: v.datetime,
+      end: v.datetime_end ?? null,
+      price: Number((Number(v.value) / 1000).toFixed(6)),
+    }))
+    .sort((a, b) => new Date(a.start) - new Date(b.start))
+    .slice(0, 24);
+
+  return { date: dateStr, hours };
+}
+
+function computeSummary(day) {
+  const prices = day.hours.map((h) => h.price).filter(Number.isFinite);
+  const sorted = [...prices].sort((a, b) => a - b);
+  return {
+    min: sorted[0] ?? null,
+    max: sorted.at(-1) ?? null,
+    mean: sorted.length
+      ? Number((sorted.reduce((s, x) => s + x, 0) / sorted.length).toFixed(6))
+      : null,
+  };
+}
+
+async function fetchRedataDay(dateStr) {
+  const url = new URL(REDATA_URL);
+  url.searchParams.set("time_trunc", "hour");
+  url.searchParams.set("start_date", `${dateStr}T00:00`);
+  url.searchParams.set("end_date", `${dateStr}T23:59`);
+  url.searchParams.set("geo_trunc", "electric_system");
+  url.searchParams.set("geo_limit", "peninsular");
+  url.searchParams.set("geo_ids", "8741");
+
+  const res = await fetch(url.toString(), { headers: { Accept: "application/json" } });
+  if (!res.ok) throw new Error(`REData ${res.status}`);
+  return parseRedataJson(await res.json(), dateStr);
+}
+
+async function fetchLivePrices() {
+  const today = madridDateStr();
+  const tomorrow = addDays(today, 1);
+  const days = [];
+
+  const todayData = await fetchRedataDay(today);
+  if (!todayData?.hours?.length) throw new Error("Sin datos de hoy");
+  days.push({ ...todayData, summary: computeSummary(todayData) });
+
   try {
-    const res2 = await fetch("./data.json");
-    if (res2.ok) return res2.json();
+    const tomorrowData = await fetchRedataDay(tomorrow);
+    if (tomorrowData?.hours?.length >= 12) {
+      days.push({ ...tomorrowData, summary: computeSummary(tomorrowData) });
+    }
   } catch (_) {}
 
-  // Fallback 2: localStorage
+  return {
+    generatedAt: new Date().toISOString(),
+    source: { provider: "REData (Red Eléctrica de España)", live: true },
+    timezone: TZ,
+    currency: "EUR",
+    unit: "EUR_PER_KWH",
+    days,
+  };
+}
+
+function hasUsableDays(data) {
+  return Array.isArray(data?.days) && data.days.some((d) => d.hours?.length > 0);
+}
+
+function dataHasToday(data) {
+  const today = madridDateStr();
+  return data?.days?.some((d) => d.date === today && d.hours?.length >= 12);
+}
+
+function saveCache(json) {
+  try { localStorage.setItem("hl_data_cache", JSON.stringify(json)); } catch (_) {}
+}
+
+function loadCache() {
   try {
     const saved = localStorage.getItem("hl_data_cache");
     if (saved) return JSON.parse(saved);
   } catch (_) {}
+  return null;
+}
 
-  throw new Error("No se pudo cargar data.json");
+async function tryFetch(url) {
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) return null;
+  const json = await res.json();
+  return hasUsableDays(json) ? json : null;
+}
+
+async function loadData() {
+  const today = madridDateStr();
+
+  // 1. API serverless (Vercel) — siempre fresca en producción
+  try {
+    const api = await tryFetch("/api/prices");
+    if (api && dataHasToday(api)) { saveCache(api); return api; }
+  } catch (_) {}
+
+  // 2. REData directo (CORS abierto) — funciona sin deploy ni GitHub Actions
+  try {
+    const live = await fetchLivePrices();
+    if (dataHasToday(live)) { saveCache(live); return live; }
+  } catch (_) {}
+
+  // 3. data.json estático (backup)
+  try {
+    const static_ = await tryFetch("./data.json");
+    if (static_ && dataHasToday(static_)) { saveCache(static_); return static_; }
+  } catch (_) {}
+
+  // 4. Cualquier dato disponible (aunque sea de otro día)
+  try {
+    const api = await tryFetch("/api/prices");
+    if (api) { saveCache(api); return api; }
+  } catch (_) {}
+
+  try {
+    const static_ = await tryFetch("./data.json");
+    if (static_) { saveCache(static_); return static_; }
+  } catch (_) {}
+
+  const cached = loadCache();
+  if (hasUsableDays(cached)) return cached;
+
+  throw new Error("No se pudieron obtener precios de la luz");
 }
 
 // ─── synthetic history (for weekly/monthly/annual when API only has 2 days) ──
@@ -513,6 +655,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 main().catch((err) => {
   console.error(err);
-  document.getElementById("priceEl").textContent = "Error";
-  document.getElementById("tlLabel").textContent = "Revisar consola";
+  const priceEl = document.getElementById("priceEl");
+  const tlLabel = document.getElementById("tlLabel");
+  if (priceEl) priceEl.textContent = "—";
+  if (tlLabel) tlLabel.textContent = "Sin conexión";
 });

@@ -1,4 +1,4 @@
-const CACHE = "horalavadora-v2";
+const CACHE = "horalavadora-v3";
 
 const ASSETS = [
   "./",
@@ -6,7 +6,6 @@ const ASSETS = [
   "./app.js",
   "./manifest.webmanifest",
   "./icons/icon.svg",
-  "./data.json"
 ];
 
 self.addEventListener("install", (event) => {
@@ -27,24 +26,21 @@ self.addEventListener("fetch", (event) => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // Stale-while-revalidate para data.json (si hay red, se actualiza; si no, cache).
-  if (url.pathname.endsWith("/data.json")) {
+  // Datos de precios: siempre red primero, caché solo si no hay red
+  if (url.pathname.endsWith("/data.json") || url.pathname.endsWith("/api/prices")) {
     event.respondWith(
-      caches.open(CACHE).then(async (cache) => {
-        const cached = await cache.match(req);
-        const fetchPromise = fetch(req).then((res) => {
-          if (res && res.ok) cache.put(req, res.clone());
-          return res;
-        }).catch(() => null);
-        return cached || (await fetchPromise) || Response.error();
-      })
+      fetch(req).then((res) => {
+        if (res && res.ok) {
+          caches.open(CACHE).then((cache) => cache.put(req, res.clone()));
+        }
+        return res;
+      }).catch(() => caches.match(req).then((c) => c || Response.error()))
     );
     return;
   }
 
-  // Cache-first para el resto.
+  // Cache-first para assets estáticos
   event.respondWith(
     caches.match(req).then((cached) => cached || fetch(req))
   );
 });
-

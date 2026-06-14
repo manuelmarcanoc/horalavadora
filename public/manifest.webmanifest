@@ -8,13 +8,13 @@
   "theme_color": "#c0471a",
   "icons": [
     {
-      "src": "./icons/favicon.png",
+      "src": "./lavadora.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/favicon.png",
+      "src": "./lavadora.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
